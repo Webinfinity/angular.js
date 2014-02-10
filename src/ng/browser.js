@@ -147,7 +147,7 @@ function Browser(window, document, $log, $sniffer) {
    * @param {string} url New url (when used as setter)
    * @param {boolean=} replace Should new url replace current history record ?
    */
-  self.url = function(url, replace) {
+  self.url = function(url, replace, state) {
     // Android Browser BFCache causes location, history reference to become stale.
     if (location !== window.location) location = window.location;
     if (history !== window.history) history = window.history;
@@ -157,9 +157,9 @@ function Browser(window, document, $log, $sniffer) {
       if (lastBrowserUrl == url) return;
       lastBrowserUrl = url;
       if ($sniffer.history) {
-        if (replace) history.replaceState(null, '', url);
+        if (replace) history.replaceState(state || null, '', url);
         else {
-          history.pushState(null, '', url);
+          history.pushState(state || null, '', url);
           // Crazy Opera Bug: http://my.opera.com/community/forums/topic.dml?id=1185462
           baseElement.attr('href', baseElement.attr('href'));
         }

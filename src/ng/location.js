@@ -677,6 +677,11 @@ function $LocationProvider(){
 
     // update browser
     var changeCounter = 0;
+    var stateCounter = 0;
+    if ($sniffer.history && history.state != null && history.state.$$counter !== undefined) {
+	    stateCounter = history.state.$$counter;
+    }
+    
     $rootScope.$watch(function $locationWatch() {
       var oldUrl = $browser.url();
       var currentReplace = $location.$$replace;
@@ -688,7 +693,7 @@ function $LocationProvider(){
               defaultPrevented) {
             $location.$$parse(oldUrl);
           } else {
-            $browser.url($location.absUrl(), currentReplace);
+            $browser.url($location.absUrl(), currentReplace, { $$counter: stateCounter++ });
             afterLocationChange(oldUrl);
           }
         });
